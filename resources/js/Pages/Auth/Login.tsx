@@ -1,97 +1,102 @@
-import { useEffect, FormEventHandler } from 'react';
-import Checkbox from '@/Components/Checkbox';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect, FormEventHandler } from "react";
+import Checkbox from "@/Components/Checkbox";
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import { Head, Link, useForm } from "@inertiajs/react";
+import feather from "feather-icons";
 
-export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
+export default function Login({
+    status,
+    canResetPassword,
+}: {
+    status?: string;
+    canResetPassword: boolean;
+}) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
+        email: "",
+        password: "",
         remember: false,
     });
 
     useEffect(() => {
+        feather.replace();
+
         return () => {
-            reset('password');
+            reset("password");
         };
     }, []);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('login'));
+        post(route("login"));
     };
 
     return (
-        <GuestLayout>
-            <Head title="Log in" />
+        <div className="relative bg-black overflow-hidden min-h-screen flex items-center justify-center">
+            <Head title="Login" />
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+            <video
+                autoPlay
+                muted
+                loop
+                className="min-w-full min-h-full absolute z-0"
+            >
+                <source src="/background_video_new.mp4" type="video/mp4" />
+            </video>
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+            <div className="absolute z-1 bg-black opacity-80 w-full h-full" />
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
+            <div className="z-2 absolute bg-white w-1/3 p-8 rounded-sm shadow-lg bg-opacity-85">
+                <div className="font-semibold text-xl text-center">
+                    Silakan Login
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                {status && (
+                    <div className="mb-4 font-medium text-sm text-green-600">
+                        {status}
+                    </div>
+                )}
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
+                <form onSubmit={submit}>
+                    <div className="mt-6 flex flex-row items-center">
+                        <i data-feather="mail" className="text-gray-500"></i>
+                        <TextInput
+                            type="email"
+                            name="email"
+                            value={data.email}
+                            className="block w-full ml-4"
+                            placeholder="Masukan email"
+                            isFocused={true}
+                            onChange={(e) => setData("email", e.target.value)}
                         />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
-                    </label>
-                </div>
+                    </div>
+                    <InputError message={errors.email} className="mt-2" />
 
-                <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
+                    <div className="mt-4 flex flex-row items-center">
+                        <i data-feather="lock" className="text-gray-500"></i>
+                        <TextInput
+                            type="password"
+                            name="password"
+                            value={data.password}
+                            className="block w-full ml-4"
+                            placeholder="Masukan password"
+                            onChange={(e) =>
+                                setData("password", e.target.value)
+                            }
+                        />
+                    </div>
+                    <InputError message={errors.password} className="mt-2" />
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+                    <div className="flex items-center justify-center mt-6">
+                        <PrimaryButton disabled={processing}>
+                            Login
+                        </PrimaryButton>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 }
